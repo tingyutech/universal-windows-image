@@ -26,8 +26,8 @@ Write-Output "Starting WinRM ..."
 & netsh advfirewall firewall add rule name="WinRM 5985" protocol=TCP dir=in localport=5985 action=allow
 & sc.exe config winrm start=auto
 
-Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
+Start-Service sshd
 
 Write-Host "Disable Server Manager on Logon"
 Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask

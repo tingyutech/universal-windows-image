@@ -10,3 +10,4 @@ choco install yq --version 4.33.3 -y
 choco install vswhere --version 3.1.4 -y
 choco install curl --version 8.1.2 -y
 choco install wget --version 1.21.4 -y
+choco install nuget.commandline --version 6.6.1 -y
