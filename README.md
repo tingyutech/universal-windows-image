@@ -1,5 +1,7 @@
 # Univeral Windows Image
 
+Build Windows CI Image automated, painless, and reproducible.
+
 ## Download Files
 
 * `wim\install.wim` from windows server 2022 iso X:\Sources\install.wim
