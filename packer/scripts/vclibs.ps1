@@ -1,3 +1,5 @@
+. C:\image\guard.ps1
+
 Write-Host "Downloading vclibs ..."
 iwr https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile $env:Temp\vclibsx64.appx
 iwr https://aka.ms/Microsoft.VCLibs.x86.14.00.Desktop.appx -OutFile $env:Temp\vclibsx86.appx

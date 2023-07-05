@@ -1,3 +1,5 @@
+. C:\image\guard.ps1
+
 $appxUrl = 'https://github.com/microsoft/winget-cli/releases/download/v1.6.1573-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 $licenseUrl = 'https://github.com/microsoft/winget-cli/releases/download/v1.6.1573-preview/ba27c402ae29410eb93cfa9cb27f1376_License1.xml '
 

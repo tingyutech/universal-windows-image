@@ -1,7 +1,9 @@
+. C:\image\guard.ps1
+
 Write-Host "Downloading bootstrapper..."
 iwr https://aka.ms/vs/16/release/vs_enterprise.exe -OutFile C:\image\vs2019.exe
 Write-Host "Installing VS 2019 ..."
-Start-Process -Wait -FilePath C:\image\vs2019.exe -ArgumentList @(
+Start-ProcessCheck C:\image\vs2019.exe -ArgumentList @(
   "--includeRecommended"
   "--passive"
   "--norestart"
@@ -13,4 +15,8 @@ Start-Process -Wait -FilePath C:\image\vs2019.exe -ArgumentList @(
   "--add Microsoft.VisualStudio.Workload.ManagedDesktop"
   "--add Microsoft.VisualStudio.Workload.NativeDesktop"
   "--add Microsoft.VisualStudio.Workload.NetCoreTools"
+) -AllowExitCodes @(
+  0 # Operation completed successfully
+  1641 #	Operation completed successfully, and reboot was initiated
+  3010 #	Operation completed successfully, but install requires reboot before it can be used
 )

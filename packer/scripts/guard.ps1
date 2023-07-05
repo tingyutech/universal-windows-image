@@ -1,6 +1,26 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues['*:ErrorAction']='Stop'
+
+function Start-ProcessCheck {
+  [CmdletBinding()]
+  param (
+    [Parameter(Position=0, Mandatory=1)][string] $ProcessName,
+    [Parameter()][string[]] $ArgumentList,
+    [Parameter()][int[]] $AllowExitCodes
+  )
+
+  $process = Start-Process -Wait -PassThru $ProcessName -ArgumentList $ArgumentList
+  $code = $process.ExitCode
+  if ($null -eq $AllowExitCodes) {
+    $AllowExitCodes = @(0)
+  }
+
+  if (-not $code -in $AllowExitCodes) {
+    throw "$ProcessName exited with code $code"
+  }
+}
+
 # Taken from psake https://github.com/psake/psake
 <#
 .SYNOPSIS

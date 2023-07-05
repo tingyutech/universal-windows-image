@@ -1,8 +1,7 @@
-Write-Host "Restting installer password ..."
-Add-Type -AssemblyName System.Web
-$Password = [System.Web.Security.Membership]::GeneratePassword(64, 8)
-$SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
-Get-LocalUser -Name "installer" | Set-LocalUser -Password $SecurePassword
+. C:\image\guard.ps1
+
+Write-Host "Removing installer user"
+net user installer /delete
 
 Write-Host "Setting Default SSH Shell to pwsh ..."
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell `
@@ -18,7 +17,7 @@ Write-Host "Set SSH Service not to start on boot ..."
 Set-Service -Name sshd -StartupType 'Manual'
 
 Write-Host "Running Sysprep ..."
-Start-Process -Wait "$ENV:SystemRoot\System32\Sysprep\Sysprep.exe" `
+Start-ProcessCheck -Wait "$ENV:SystemRoot\System32\Sysprep\Sysprep.exe" `
   -ArgumentList "/generalize /oobe /shutdown /unattend:`"C:\image\UnattendUniversal.xml`""
 
 Write-Host "Finished Sysprep."

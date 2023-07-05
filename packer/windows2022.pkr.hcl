@@ -51,6 +51,11 @@ build {
     ]
   }
 
+  provisioner "file" {
+    destination = "C:\\image\\guard.ps1"
+    source = "./packer/scripts/guard.ps1"
+  }
+
   provisioner "powershell" {
     execution_policy = "unrestricted"
     scripts = [
