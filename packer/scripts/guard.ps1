@@ -39,11 +39,17 @@ function Exec
       [Parameter(Position=1,Mandatory=0)][string]$errorMessage = ("Error executing command {0}" -f $cmd)
   )
   & $cmd
-  if ($LASTEXITCODE -ne 0) {
-    Write-Error "Exec: $cmd exited with code $LASTEXITCODE"
-    throw ("Exec: " + $errorMessage)
+  $result = $?
+  if (Test-Path variable:LASTEXITCODE) {
+    if ($LASTEXITCODE -ne 0) {
+      throw "Exec: $cmd exited with code $LASTEXITCODE"
+    } else {
+      Write-Host "Exec: successfully executed command: $cmd"
+    }
   } else {
-    Write-Host "Exec: successfully executed command: $cmd"
+    if ($result -ne $true) {
+      throw "Exec: $cmd failed"
+    }
   }
 }
 
