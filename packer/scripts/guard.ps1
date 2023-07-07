@@ -38,10 +38,12 @@ function Exec
       [Parameter(Position=0,Mandatory=1)][scriptblock]$cmd,
       [Parameter(Position=1,Mandatory=0)][string]$errorMessage = ("Error executing command {0}" -f $cmd)
   )
-  $LastExitCode = 0
   & $cmd
-  if ($LastExitCode -ne 0) {
+  if ($LASTEXITCODE -ne 0) {
+    Write-Error "Exec: $cmd exited with code $LASTEXITCODE"
     throw ("Exec: " + $errorMessage)
+  } else {
+    Write-Host "Exec: successfully executed command: $cmd"
   }
 }
 
@@ -55,7 +57,7 @@ function Exec-CommandRetry {
     [int]$Maximum = 5,
 
     [Parameter(Position=2, Mandatory=$false)]
-    [int]$Delay = 100
+    [int]$Delay = 1000
   )
 
   Begin {
@@ -70,9 +72,13 @@ function Exec-CommandRetry {
         return
       } catch {
         Write-Error $_ -ErrorAction Continue
-        Start-Sleep -Milliseconds $Delay
+        if ($cnt -lt $Maximum + 1) {
+          Write-Host "Waiting $Delay ms..."
+          Start-Sleep -Milliseconds $Delay
+          Write-Host "Retry $cnt / $Maximum"
+        }
       }
-    } while ($cnt -lt $Maximum)
+    } while ($cnt -lt $Maximum + 1)
 
     # Throw an error after $Maximum unsuccessful invocations. Doesn't need
     # a condition, since the function returns upon successful invocation.
