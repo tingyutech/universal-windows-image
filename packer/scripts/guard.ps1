@@ -38,10 +38,10 @@ function Exec
       [Parameter(Position=0,Mandatory=1)][scriptblock]$cmd,
       [Parameter(Position=1,Mandatory=0)][string]$errorMessage = ("Error executing command {0}" -f $cmd)
   )
-  $lastexitcode = 0
+  $LastExitCode = 0
   & $cmd
-  if ($lastexitcode -ne 0) {
-      throw ("Exec: " + $errorMessage)
+  if ($LastExitCode -ne 0) {
+    throw ("Exec: " + $errorMessage)
   }
 }
 
