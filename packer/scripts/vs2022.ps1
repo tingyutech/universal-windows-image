@@ -1,9 +1,12 @@
 . C:\image\guard.ps1
 
-Write-Host "Downloading bootstrapper..."
-iwr https://aka.ms/vs/17/release/vs_enterprise.exe -OutFile C:\image\vs2022.exe
+Write-Host "Downloading VS 2022 bootstrapper..."
+Exec-CommandRetry {
+  Invoke-WebRequest https://aka.ms/vs/17/release/vs_enterprise.exe -OutFile C:\image\vs2022.exe
+}
+
 Write-Host "Installing VS 2022 ..."
-Start-ProcessCheck -Wait -FilePath C:\image\vs2022.exe -ArgumentList @(
+Start-ProcessCheck C:\image\vs2022.exe -ArgumentList @(
   "--includeRecommended"
   "--passive"
   "--norestart"

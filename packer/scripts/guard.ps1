@@ -33,13 +33,49 @@ function Start-ProcessCheck {
 #>
 function Exec
 {
-    [CmdletBinding()]
-    param(
-        [Parameter(Position=0,Mandatory=1)][scriptblock]$cmd,
-        [Parameter(Position=1,Mandatory=0)][string]$errorMessage = ("Error executing command {0}" -f $cmd)
-    )
-    & $cmd
-    if ($lastexitcode -ne 0) {
-        throw ("Exec: " + $errorMessage)
-    }
+  [CmdletBinding()]
+  param(
+      [Parameter(Position=0,Mandatory=1)][scriptblock]$cmd,
+      [Parameter(Position=1,Mandatory=0)][string]$errorMessage = ("Error executing command {0}" -f $cmd)
+  )
+  $lastexitcode = 0
+  & $cmd
+  if ($lastexitcode -ne 0) {
+      throw ("Exec: " + $errorMessage)
+  }
+}
+
+function Exec-CommandRetry {
+  [CmdletBinding()]
+  Param(
+    [Parameter(Position=0, Mandatory=$true)]
+    [scriptblock]$ScriptBlock,
+
+    [Parameter(Position=1, Mandatory=$false)]
+    [int]$Maximum = 5,
+
+    [Parameter(Position=2, Mandatory=$false)]
+    [int]$Delay = 100
+  )
+
+  Begin {
+    $cnt = 0
+  }
+
+  Process {
+    do {
+      $cnt++
+      try {
+        Exec $ScriptBlock
+        return
+      } catch {
+        Write-Error $_ -ErrorAction Continue
+        Start-Sleep -Milliseconds $Delay
+      }
+    } while ($cnt -lt $Maximum)
+
+    # Throw an error after $Maximum unsuccessful invocations. Doesn't need
+    # a condition, since the function returns upon successful invocation.
+    throw 'Execution failed.'
+  }
 }

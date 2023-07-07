@@ -1,7 +1,10 @@
 . C:\image\guard.ps1
 
-Write-Host "Downloading bootstrapper..."
-iwr https://aka.ms/vs/16/release/vs_enterprise.exe -OutFile C:\image\vs2019.exe
+Write-Host "Downloading VS 2019 bootstrapper..."
+Exec-CommandRetry {
+  Invoke-WebRequest https://aka.ms/vs/16/release/vs_enterprise.exe -OutFile C:\image\vs2019.exe
+}
+
 Write-Host "Installing VS 2019 ..."
 Start-ProcessCheck C:\image\vs2019.exe -ArgumentList @(
   "--includeRecommended"

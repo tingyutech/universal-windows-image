@@ -32,6 +32,7 @@ source "hyperv-iso" "vm" {
   // for debug
   // skip_compaction = true
   // skip_export = true
+  output_directory = "test"
 }
 
 build {

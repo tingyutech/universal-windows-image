@@ -5,8 +5,13 @@ $licenseUrl = 'https://github.com/microsoft/winget-cli/releases/download/v1.6.15
 
 Write-Host "Downloading winget ..."
 $ProgressPreference = 'SilentlyContinue'
-iwr $appxUrl -OutFile $env:Temp\winget.msixbundle
-iwr $licenseUrl -OutFile $env:Temp\license.xml
+Exec-CommandRetry {
+  Invoke-WebRequest $appxUrl -OutFile $env:Temp\winget.msixbundle
+}
+
+Exec-CommandRetry {
+  Invoke-WebRequest $licenseUrl -OutFile $env:Temp\license.xml
+}
 
 Write-Host "Installing winget ..."
 Add-AppxProvisionedPackage -Online `

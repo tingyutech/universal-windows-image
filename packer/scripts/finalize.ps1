@@ -17,7 +17,7 @@ Write-Host "Set SSH Service not to start on boot ..."
 Set-Service -Name sshd -StartupType 'Manual'
 
 Write-Host "Running Sysprep ..."
-Start-ProcessCheck -Wait "$ENV:SystemRoot\System32\Sysprep\Sysprep.exe" `
+Start-ProcessCheck "$ENV:SystemRoot\System32\Sysprep\Sysprep.exe" `
   -ArgumentList "/generalize /oobe /shutdown /unattend:`"C:\image\UnattendUniversal.xml`""
 
 Write-Host "Finished Sysprep."
